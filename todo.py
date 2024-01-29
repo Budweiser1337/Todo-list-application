@@ -1,108 +1,75 @@
 import tkinter as tk
+from tkinter import messagebox
 
-tasks = []
+class TodoListApp:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Todo List App")
 
+        self.tasks = []
+        self.completed_tasks = set()
 
-def add_task(task):
-    tasks.append(task)
-    print("Task added successfully.")
+        # Create widgets
+        self.task_entry = tk.Entry(root, width=30)
+        self.add_button = tk.Button(root, text="Add Task", command=self.add_task)
+        self.task_listbox = tk.Listbox(root, selectmode=tk.SINGLE)
+        self.delete_button = tk.Button(root, text="Delete Task", command=self.delete_task)
+        self.complete_button = tk.Button(root, text="Complete Task", command=self.complete_task)
 
+        # Pack widgets
+        self.task_entry.pack(pady=10)
+        self.add_button.pack()
+        self.task_listbox.pack(pady=10)
+        self.delete_button.pack()
+        self.complete_button.pack()
 
-def list_tasks():
-    if not tasks:
-        print("No tasks found.")
-    else:
-        print("Tasks:")
-        for index, task in enumerate(tasks, start=1):
-            print(f"{index}. {task}")
+        # Bind double click event to task_listbox
+        self.task_listbox.bind('<Double-1>', self.complete_task)
 
+        # Populate the task list
+        self.update_task_list()
 
-
-def complete_task(task_index):
-    if 1 <= task_index <= len(tasks):
-        completed_task = tasks.pop(task_index - 1)
-        print(f"Completed task: {completed_task}")
-    else:
-        print("Invalid task index.")
-
-
-def main():
-    print("Welcome to the Todo List App!")
-
-    while True:
-        print("\nMenu:")
-        print("1. Add task")
-        print("2. List tasks")
-        print("3. Complete task")
-        print("0. Exit")
-
-        choice = input("Enter your choice: ")
-
-        if choice == "1":
-            task = input("Enter task: ")
-            add_task(task)
-        elif choice == "2":
-            list_tasks()
-        elif choice == "3":
-            task_index = int(input("Enter task index: "))
-            complete_task(task_index)
-        elif choice == "0":
-            print("Goodbye!")
-            break
+    def add_task(self):
+        task = self.task_entry.get()
+        if task:
+            self.tasks.append(task)
+            self.update_task_list()
+            self.task_entry.delete(0, tk.END)
         else:
-            print("Invalid choice. Please try again.")
+            messagebox.showwarning("Warning", "Please enter a task.")
 
-    if not tasks:
-        print("There is no task.")
+    def delete_task(self):
+        selected_index = self.task_listbox.curselection()
+        if selected_index:
+            selected_task = self.tasks[selected_index[0]]
+            self.tasks.remove(selected_task)
+            self.completed_tasks.discard(selected_task)
+            self.update_task_list()
+        else:
+            messagebox.showwarning("Warning", "Please select a task to delete.")
 
+    def complete_task(self, event=None):
+        selected_index = self.task_listbox.curselection()
+        if selected_index:
+            selected_task = self.tasks[selected_index[0]]
+            if selected_task not in self.completed_tasks:
+                self.completed_tasks.add(selected_task)
+            else:
+                self.completed_tasks.remove(selected_task)
+            self.update_task_list()
+        else:
+            messagebox.showwarning("Warning", "Please select a task to mark as complete.")
 
-window = tk.Tk()
-window.title("Todo List App")
-
-# Create a listbox to display the tasks
-task_listbox = tk.Listbox(window, width=50)
-task_listbox.pack()
-
-
-def add_task():
-    task = task_entry.get()
-    if task:
-        task_listbox.insert(tk.END, task)
-        task_entry.delete(0, tk.END)
-
-
-def delete_task():
-    selected_task = task_listbox.curselection()
-    if selected_task:
-        task_listbox.delete(selected_task)
-
-def complete_task():
-    selected_task = task_listbox.curselection()
-    if selected_task:
-        index = selected_task[0]
-        task = tasks[index]
-        if not task["completed"]:
-            task["completed"] = True
-            task_listbox.itemconfig(index, {'bg': 'lightgray', 'fg': 'gray', 'selectbackground': 'lightgray'})
-            print(f"Completed task: {task['task']}")
-
-
-
-# Create an entry field and buttons
-task_entry = tk.Entry(window, width=40)
-task_entry.pack()
-
-add_button = tk.Button(window, text="Add Task", command=add_task)
-add_button.pack()
-
-delete_button = tk.Button(window, text="Delete Task", command=delete_task)
-delete_button.pack()
-
-complete_button = tk.Button(window, text="Complete Task", command=complete_task)
-complete_button.pack()
-
-# Run the Tkinter event loop
-window.mainloop()
+    def update_task_list(self):
+        self.task_listbox.delete(0, tk.END)
+        for task in self.tasks:
+            if task in self.completed_tasks:
+                self.task_listbox.insert(tk.END, f"[✓] {task}")
+            else:
+                self.task_listbox.insert(tk.END, f"[] {task}")
 
 if __name__ == "__main__":
-    main()
+    root = tk.Tk()
+    app = TodoListApp(root)
+    root.mainloop()
+
