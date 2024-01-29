@@ -76,6 +76,17 @@ def delete_task():
     if selected_task:
         task_listbox.delete(selected_task)
 
+def complete_task():
+    selected_task = task_listbox.curselection()
+    if selected_task:
+        index = selected_task[0]
+        task = tasks[index]
+        if not task["completed"]:
+            task["completed"] = True
+            task_listbox.itemconfig(index, {'bg': 'lightgray', 'fg': 'gray', 'selectbackground': 'lightgray'})
+            print(f"Completed task: {task['task']}")
+
+
 
 # Create an entry field and buttons
 task_entry = tk.Entry(window, width=40)
@@ -86,6 +97,9 @@ add_button.pack()
 
 delete_button = tk.Button(window, text="Delete Task", command=delete_task)
 delete_button.pack()
+
+complete_button = tk.Button(window, text="Complete Task", command=complete_task)
+complete_button.pack()
 
 # Run the Tkinter event loop
 window.mainloop()
