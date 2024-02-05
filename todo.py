@@ -75,9 +75,22 @@ class TodoListApp:
             else:
                 self.completed_tasks.remove(selected_task)
 
+
+
+            # Create a copy of self.tasks before iterating over it
+            updated_tasks = []
+            for index, task in enumerate(self.tasks):
+                if index == selected_index[0]:
+                    updated_tasks.append(selected_task)
+                else:
+                    updated_tasks.append(task)
+
+            self.tasks = updated_tasks
+
             self.update_task_list()
         else:
             messagebox.showwarning("Warning", "Please select a task to mark as complete.")
+
 
     def update_task_list(self):
         self.task_listbox.delete(0, tk.END)
