@@ -1,5 +1,8 @@
 import tkinter as tk
 from tkinter import messagebox
+import tkinter as tk
+from tkinter import messagebox
+
 
 class TodoListApp:
     def __init__(self, root):
@@ -40,7 +43,7 @@ class TodoListApp:
         self.complete_button.grid(row=0, column=1, padx=5)
 
         # Bind double click event to task_listbox
-        self.task_listbox.bind('<Double-1>', self.complete_task)
+        self.task_listbox.bind('<Double-1>', lambda event: self.complete_task())
 
         # Populate the task list
         self.update_task_list()
@@ -57,14 +60,13 @@ class TodoListApp:
     def delete_task(self):
         selected_index = self.task_listbox.curselection()
         if selected_index:
-            selected_task = self.tasks[selected_index[0]]
-            self.tasks.remove(selected_task)
-            self.completed_tasks.discard(selected_task)
+            self.tasks.pop(selected_index[0])
+            self.completed_tasks.discard(self.tasks[selected_index[0]])
             self.update_task_list()
         else:
             messagebox.showwarning("Warning", "Please select a task to delete.")
 
-    def complete_task(self, event=None):
+    def complete_task(self):
         selected_index = self.task_listbox.curselection()
         if selected_index:
             selected_task = self.tasks[selected_index[0]]
@@ -72,6 +74,7 @@ class TodoListApp:
                 self.completed_tasks.add(selected_task)
             else:
                 self.completed_tasks.remove(selected_task)
+
             self.update_task_list()
         else:
             messagebox.showwarning("Warning", "Please select a task to mark as complete.")
