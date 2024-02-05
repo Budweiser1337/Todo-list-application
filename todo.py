@@ -64,27 +64,18 @@ class TodoListApp:
         else:
             messagebox.showwarning("Warning", "Please select a task to delete.")
 
-    def complete_task(self, event=None):
+    def delete_task(self):
         selected_index = self.task_listbox.curselection()
         if selected_index:
-            selected_task = self.tasks[selected_index[0]]
-            if selected_task not in self.completed_tasks:
-                self.completed_tasks.add(selected_task)
+            selected_index = selected_index[0]
+            if 0 <= selected_index < len(self.tasks):
+                selected_task = self.tasks.pop(selected_index)
+                self.completed_tasks.discard(selected_task)
+                self.update_task_list()
             else:
-                self.completed_tasks.remove(selected_task)
-
-            # Create a copy of self.tasks before iterating over it
-            updated_tasks = []
-            for index, task in enumerate(self.tasks):
-                if index == selected_index[0]:
-                    updated_tasks.append(selected_task)
-                else:
-                    updated_tasks.append(task)
-
-            self.tasks = updated_tasks
-            self.update_task_list()
+                messagebox.showwarning("Warning", "Invalid selection.")
         else:
-            messagebox.showwarning("Warning", "Please select a task to mark as complete.")
+           messagebox.showwarning("Warning", "Please select a task to delete.")
 
 
     def update_task_list(self):
