@@ -10,7 +10,7 @@ These instructions will get you a copy of the project up and running on your loc
 This project only requires Python.
 
 ```
-Visit the official Python website and download the latest version of Python
+Visit the official Python website and download [the latest version](https://www.python.org/downloads/) of Python 
 ```
 
 ### Installing
