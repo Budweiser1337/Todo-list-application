@@ -34,6 +34,14 @@ Run the application:
 py todo.py
 ```
 
+### Contributing
+
+If you'd like to contribute to this project, please follow the [Contributing Guidelines](CONTRIBUTING.md).
+
+### Issues
+
+If you encounter any issues or have suggestions, please open an issue on the [Issue Tracker](https://github.com/Budweiser1337/Todo-list-application-HU-Yvan-CDOF5/issues).
+
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
